@@ -41,7 +41,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen dark flex flex-col`}>{children}</body>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen dark flex flex-col bg-[#0D1117]`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

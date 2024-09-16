@@ -1,4 +1,6 @@
+import CodeTree from "@/components/layout/CodeTree";
 import Navigation from "@/components/layout/Navigation";
+import PageContent from "@/components/layout/PageContent";
 import RepositorySubNavigation from "@/components/layout/RepositorySubNavigation";
 import { GitHubRepository, GitHubRepoTree } from "@/lib/types";
 import { Octokit } from "octokit";
@@ -19,34 +21,49 @@ export default async function Page({ params }: PageParams) {
       <Navigation
         repository={repository}
         subnavigation={
-          <RepositorySubNavigation repositoryURL={repository.full_name} activeTab="code" hasIssues={repository.has_issues} hasDiscussions={repository.has_discussions} />
+          repository && (
+            <RepositorySubNavigation
+              repositoryURL={repository.full_name}
+              activeTab="code"
+              hasIssues={repository.has_issues}
+              hasDiscussions={repository.has_discussions}
+            />
+          )
         }
       />
-      <div className="pt-4 px-3 sm:px-4 md:px-6">
-        {tree.tree.length > 0
-          ? tree.tree
-              .sort((a, b) => a.type?.localeCompare(b.type || "") || -1)
-              .reverse()
-              .map((item, index) => <p key={index}>{item.path}</p>)
-          : "empty repository"}
-      </div>
+      <PageContent>
+        {repository ? (
+          <CodeTree tree={tree} />
+        ) : (
+          <div className="flex justify-center text-2xl text-center font-black font-mono pt-16">
+            THIS REPOSITORY DOES NOT EXIST
+          </div>
+        )}
+      </PageContent>
     </>
   );
 }
 
-async function getRepository(owner: string, repo: string): Promise<[GitHubRepository, GitHubRepoTree]> {
+async function getRepository(
+  owner: string,
+  repo: string
+): Promise<[GitHubRepository | undefined, GitHubRepoTree | undefined]> {
   const octokit = new Octokit({});
 
-  const repository = await octokit.request("GET /repos/{owner}/{repo}", {
-    owner: owner,
-    repo: repo,
-  });
+  try {
+    const repository = await octokit.request("GET /repos/{owner}/{repo}", {
+      owner: owner,
+      repo: repo,
+    });
 
-  const tree = await octokit.request("GET /repos/{owner}/{repo}/git/trees/{tree_sha}", {
-    owner: owner,
-    repo: repo,
-    tree_sha: repository.data.default_branch,
-  });
+    const tree = await octokit.request("GET /repos/{owner}/{repo}/git/trees/{tree_sha}", {
+      owner: owner,
+      repo: repo,
+      tree_sha: repository.data.default_branch,
+    });
 
-  return [repository.data, tree.data];
+    return [repository.data, tree.data];
+  } catch {
+    return [undefined, undefined];
+  }
 }
