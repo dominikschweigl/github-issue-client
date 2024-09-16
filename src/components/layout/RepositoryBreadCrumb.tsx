@@ -2,28 +2,24 @@ import React from "react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator } from "../ui/breadcrumb";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
+import { GitHubRepository } from "@/lib/types";
 
 type RepositoryBreadCrumbProps = {
-  avatar?: string;
-  route: string[];
+  repository: GitHubRepository;
 };
 
-export default function RepositoryBreadCrumb({ avatar, route }: RepositoryBreadCrumbProps) {
+export default function RepositoryBreadCrumb({ repository }: RepositoryBreadCrumbProps) {
   return (
     <div className="flex gap-2">
       <Avatar>
-        <AvatarImage src={avatar} />
-        <AvatarFallback>{route[0][0]}</AvatarFallback>
+        <AvatarImage src={repository.owner.avatar_url} />
+        <AvatarFallback>{repository.owner.login[0]}</AvatarFallback>
       </Avatar>
       <Breadcrumb>
         <BreadcrumbList className=" flex-nowrap ">
-          {route.slice(0, -1).map((item) => (
-            <>
-              <BreadcrumbItem>{item}</BreadcrumbItem>
-              <BreadcrumbSeparator />
-            </>
-          ))}
-          <BreadcrumbItem>{route.at(-1)}</BreadcrumbItem>
+          <BreadcrumbItem>{repository.owner.login}</BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>{repository.name}</BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
     </div>
