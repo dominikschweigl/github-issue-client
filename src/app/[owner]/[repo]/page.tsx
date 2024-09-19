@@ -1,9 +1,11 @@
-import CodeTree from "@/components/layout/CodeTree";
+import ListTable from "@/components/layout/ListTable";
 import Navigation from "@/components/layout/Navigation";
 import PageContent from "@/components/layout/PageContent";
 import RepositorySubNavigation from "@/components/layout/RepositorySubNavigation";
 import { GitHubRepository, GitHubRepoTree } from "@/lib/types";
 import { Octokit } from "octokit";
+import { QuestionMarkIcon } from "@radix-ui/react-icons";
+import { File, Folder } from "lucide-react";
 import React from "react";
 
 type PageParams = {
@@ -15,6 +17,16 @@ type PageParams = {
 
 export default async function Page({ params }: PageParams) {
   const [repository, tree] = await getRepository(params.owner, params.repo);
+
+  const fileList = tree?.tree
+    .sort((a, b) => a.type?.localeCompare(b.type || "") || -1)
+    .reverse()
+    .map((item, index) => (
+      <div key={index} className={`flex items-center gap-3 flex-nowrap text-sm`}>
+        <ItemIcon type={item.type} />
+        {item.path}
+      </div>
+    ));
 
   return (
     <>
@@ -33,15 +45,25 @@ export default async function Page({ params }: PageParams) {
       />
       <PageContent>
         {repository ? (
-          <CodeTree tree={tree} />
+          <ListTable items={fileList} />
         ) : (
           <div className="flex justify-center text-2xl text-center font-black font-mono pt-16">
-            THIS REPOSITORY DOES NOT EXIST
+            The Repository {params.owner}/{params.repo} does not exits.
           </div>
         )}
       </PageContent>
     </>
   );
+}
+
+function ItemIcon({ type }: { type: string | undefined }) {
+  if (type === "tree") {
+    return <Folder className="w-4 h-4" />;
+  } else if (type === "blob") {
+    return <File className="w-4 h-4" />;
+  } else {
+    return <QuestionMarkIcon className="w-4 h-4" />;
+  }
 }
 
 async function getRepository(

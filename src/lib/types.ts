@@ -6,9 +6,4 @@ export type GitHubRepoTree = Endpoints["GET /repos/{owner}/{repo}/git/trees/{tre
 
 export type GitHubIssues = Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"];
 
-export enum GitHubStatusCodes {
-  OK = 200,
-  MOVED_PERMANTENTLY = 301,
-  FORBIDDEN = 403,
-  NOT_FOUND = 404,
-}
+export type GitHubDiscussions = Endpoints["GET /teams/{team_id}/discussions"]["response"]["data"];

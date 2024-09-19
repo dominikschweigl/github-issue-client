@@ -12,7 +12,7 @@ type NavigationProps = {
 
 export default function Navigation({ repository, subnavigation }: NavigationProps) {
   return (
-    <header className="sticky top-0 min-h-16 pt-3 px-3 sm:px-4 md:px-6 border-b bg-background flex flex-col gap-2">
+    <header className="sticky top-0 min-h-16 pt-3 px-3 sm:px-4 md:px-6 border-b bg-background flex flex-col gap-2 z-10">
       <div className="flex items-center gap-4">
         <nav className="font-medium flex items-center gap-5 text-sm">
           <Link href="/" className="flex items-center gap-2">
