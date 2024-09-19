@@ -2,19 +2,13 @@ import ListTable from "@/components/layout/ListTable";
 import Navigation from "@/components/layout/Navigation";
 import PageContent from "@/components/layout/PageContent";
 import RepositorySubNavigation from "@/components/layout/RepositorySubNavigation";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { GitHubIssues, GitHubRepository } from "@/lib/types";
-import { AvatarImage } from "@radix-ui/react-avatar";
-import { QuestionMarkIcon } from "@radix-ui/react-icons";
-import TimeAgo from "javascript-time-ago";
-import { CheckIcon, CircleCheck, CircleDot, CircleSlash } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 import { Octokit } from "octokit";
-import React, { ReactNode } from "react";
-import en from "javascript-time-ago/locale/en";
+import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
-TimeAgo.addDefaultLocale(en);
+import IssuePreview from "@/components/layout/IssuePreview";
 
 type PageParams = {
   params: {
@@ -36,52 +30,9 @@ export default async function Page({ params, searchParams }: PageParams) {
     issuesState
   );
 
-  const issueList = issues.map((issue, index) => {
-    const closed = issue.closed_at ? new Date(issue.closed_at) : new Date();
-    const opened = issue.created_at ? new Date(issue.created_at) : new Date();
-    const timeAgo = new TimeAgo("en-US");
-
-    return (
-      <div key={index}>
-        <div className={`flex items-start gap-3 flex-nowrap text-sm`}>
-          <IssueIcon state={issue.state} state_reason={issue.state_reason} />
-          <div className="flex flex-col gap-1">
-            <p className="font-semibold text-[16px]">{issue.title}</p>
-            <div className="flex items-center gap-1 flex-nowrap text-xs text-gray-500">
-              {issue.state === "open" && (
-                <>
-                  <p>
-                    #{issue.number} opened {timeAgo.format(opened)} by
-                  </p>
-                  <Avatar className="w-3 h-3">
-                    <AvatarImage src={issue.user?.avatar_url} />
-                    <AvatarFallback className="bg-gray-400 text-gray-50">
-                      {issue.user?.login[0].toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p>{issue.user?.login}</p>
-                </>
-              )}
-              {issue.state === "closed" && (
-                <>
-                  <p>#{issue.number} by</p>
-                  <Avatar className="w-3 h-3">
-                    <AvatarImage src={issue.user?.avatar_url} />
-                    <AvatarFallback className="bg-gray-400 text-gray-50">
-                      {issue.user?.login[0].toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p>
-                    {issue.user?.login} was closed {timeAgo.format(closed)}
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  });
+  const issueList = issues.map((issue, index) => (
+    <IssuePreview key={index} repoName={repository.full_name} issue={issue} />
+  ));
 
   const listHead = (
     <div className="flex items-center gap-4">
@@ -124,25 +75,6 @@ export default async function Page({ params, searchParams }: PageParams) {
       </PageContent>
     </>
   );
-}
-
-function IssueIcon({
-  state,
-  state_reason,
-}: {
-  state: string | undefined;
-  state_reason: string | null | undefined;
-}): ReactNode {
-  const layout = "w-4 h-4 mt-[3px] shrink-0 ";
-  if (state === "open") {
-    return <CircleDot className={layout + "stroke-green-500"} />;
-  } else if (state === "closed" && state_reason === "not_planned") {
-    return <CircleSlash className={layout + "stroke-gray-500"} />;
-  } else if (state === "closed") {
-    return <CircleCheck className={layout + "stroke-purple-500"} />;
-  } else {
-    return <QuestionMarkIcon className={layout + "stroke-red-500"} />;
-  }
 }
 
 async function getRepositoryIssues(
