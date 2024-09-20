@@ -43,6 +43,10 @@ export default async function Page({ params }: PageParams) {
           authorAssociation={issue.author_association}
         />
       }
+      <div className="flex gap-4 items-center">
+        <p>{issue.comments} comments</p>
+        <Separator className="flex-1" />
+      </div>
       {comments.map((c) => (
         <Post
           key={c.id}

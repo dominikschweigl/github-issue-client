@@ -28,7 +28,7 @@ export default function IssuePreview({ repoName, issue }: IssuePreviewProps) {
           >
             {issue.title}
           </Link>
-          <div className="flex items-center gap-1 flex-nowrap text-xs text-gray-500">
+          <div className="flex items-center gap-1 flex-nowrap text-xs text-gray-400">
             {issue.state === "open" && (
               <>
                 <p>

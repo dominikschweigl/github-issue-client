@@ -47,9 +47,11 @@ export default async function Post({
             {user?.login} <span className="text-gray-400 font-normal">{timeAgo.format(creationTime)}</span>
           </p>
         </div>
-        <Badge variant={"secondary"} className="text-gray-400">
-          {authorAssociation[0] + authorAssociation.toLowerCase().slice(1)}
-        </Badge>
+        {authorAssociation !== "NONE" && (
+          <Badge variant={"secondary"} className="text-gray-400">
+            {authorAssociation[0] + authorAssociation.toLowerCase().slice(1)}
+          </Badge>
+        )}
       </div>
       <div className="px-4 py-4 markdown-body">{content}</div>
       <div className="flex gap-2 px-4">
