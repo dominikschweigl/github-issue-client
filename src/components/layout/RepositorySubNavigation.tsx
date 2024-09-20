@@ -1,24 +1,35 @@
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { CircleDot, Code, MessagesSquare } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 type RepositorySubNavigationProps = {
   repositoryURL: string;
-  activeTab: "code" | "issues" | "discussions";
   hasIssues: boolean;
   hasDiscussions: boolean;
 };
 
-export default function RepositorySubNavigation({ repositoryURL, activeTab, hasIssues, hasDiscussions }: RepositorySubNavigationProps) {
+export default function RepositorySubNavigation({
+  repositoryURL,
+  hasIssues,
+  hasDiscussions,
+}: RepositorySubNavigationProps) {
+  const pathname = usePathname();
+  const subcategory = pathname.split("/")[3] || "code";
+  const [active, setActive] = useState(subcategory);
+
   return (
     <div className="flex gap-4 font-normal">
       <Link href={`/${repositoryURL}`}>
         <Button
-          data-active={activeTab === "code"}
+          data-active={active === "code"}
           variant={"ghost"}
           size={"sm"}
           className="rounded-b-none border-white data-[active=true]:border-b-2 data-[active=true]:translate-y-px"
+          onClick={() => setActive("code")}
         >
           <Code className="h-4 w-4" />
           Code
@@ -28,10 +39,11 @@ export default function RepositorySubNavigation({ repositoryURL, activeTab, hasI
       {hasIssues && (
         <Link href={`/${repositoryURL}/issues`}>
           <Button
-            data-active={activeTab === "issues"}
+            data-active={active === "issues"}
             variant={"ghost"}
             size={"sm"}
             className="rounded-b-none border-white data-[active=true]:border-b-2 data-[active=true]:translate-y-px"
+            onClick={() => setActive("issues")}
           >
             <CircleDot className="h-4 w-4" />
             Issues
@@ -41,10 +53,11 @@ export default function RepositorySubNavigation({ repositoryURL, activeTab, hasI
       {hasDiscussions && (
         <Link href={`/${repositoryURL}/discussions`}>
           <Button
-            data-active={activeTab === "discussions"}
+            data-active={active === "discussions"}
             variant={"ghost"}
             size={"sm"}
             className="rounded-b-none border-white data-[active=true]:border-b-2 data-[active=true]:translate-y-px"
+            onClick={() => setActive("discussions")}
           >
             <MessagesSquare className="h-4 w-4" />
             Discussions
