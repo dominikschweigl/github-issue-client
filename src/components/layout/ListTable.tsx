@@ -26,7 +26,7 @@ export default function ListTable({ head, items, page, pages }: CodeTreeProps) {
           </div>
         ))}
       </div>
-      {page && pages && <ListPagination page={page} pages={pages} />}
+      {page != undefined && pages != undefined && <ListPagination page={page} pages={pages} />}
     </>
   );
 }

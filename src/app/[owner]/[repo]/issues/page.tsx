@@ -2,7 +2,7 @@ import ListTable from "@/components/layout/ListTable";
 import Navigation from "@/components/layout/Navigation";
 import PageContent from "@/components/layout/PageContent";
 import RepositorySubNavigation from "@/components/layout/RepositorySubNavigation";
-import { GitHubIssues, GitHubRepository } from "@/lib/types";
+import { GitHubIssue, GitHubRepository } from "@/lib/types";
 import { CheckIcon } from "lucide-react";
 import { Octokit } from "octokit";
 import React from "react";
@@ -21,7 +21,8 @@ type PageParams = {
 };
 
 export default async function Page({ params, searchParams }: PageParams) {
-  const currentPage = Number.parseInt(searchParams?.page || "1");
+  let currentPage = Number.parseInt(searchParams?.page || "1");
+  currentPage = currentPage > 0 ? currentPage : 1;
   const issuesState = searchParams?.state || "open";
   const [repository, issues, pages] = await getRepositoryIssues(
     params.owner,
@@ -82,7 +83,7 @@ async function getRepositoryIssues(
   repo: string,
   page: number,
   state: string
-): Promise<[GitHubRepository, GitHubIssues, number]> {
+): Promise<[GitHubRepository, GitHubIssue[], number]> {
   const octokit = new Octokit({});
 
   const repository = await octokit.request("GET /repos/{owner}/{repo}", {

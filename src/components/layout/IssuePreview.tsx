@@ -1,6 +1,6 @@
 import TimeAgo from "javascript-time-ago";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { GitHubIssues } from "@/lib/types";
+import { GitHubIssue } from "@/lib/types";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { CircleCheck, CircleDot, CircleSlash } from "lucide-react";
@@ -9,7 +9,7 @@ import Link from "next/link";
 
 type IssuePreviewProps = {
   repoName: string;
-  issue: GitHubIssues[0];
+  issue: GitHubIssue;
 };
 
 export default function IssuePreview({ repoName, issue }: IssuePreviewProps) {
