@@ -26,7 +26,7 @@ export default function RepositorySearchModal({ isDialog, children }: Repository
   const { loading, query, handleSearch, searchResult } = useSearchRepository();
 
   const CommandWrapper = isDialog ? CommandDialog : Command;
-  const commandProps = isDialog ? { open: open, onOpenChange: setOpen } : { shouldFilter: false };
+  const commandProps = isDialog ? { open: open, onOpenChange: setOpen } : {};
   return (
     <>
       {isDialog && children !== undefined && <div onClick={() => setOpen((prev) => !prev)}>{children}</div>}
