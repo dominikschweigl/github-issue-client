@@ -1,9 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { GitHubDiscussion } from "@/lib/types";
 import TimeAgo from "javascript-time-ago";
 import { CircleCheck, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { UserAvatar } from "./UserAvatar";
 
 type DiscussionPreviewProps = {
   repoName: string;
@@ -12,15 +12,6 @@ type DiscussionPreviewProps = {
 
 export default function DiscussionPreview({ repoName, discussion }: DiscussionPreviewProps) {
   const timeAgo = new TimeAgo("en-US");
-
-  const UserAvatar = () => (
-    <Avatar className="w-3 h-3 translate-y-0.5">
-      <AvatarImage src={discussion.user?.avatar_url} />
-      <AvatarFallback className="bg-gray-400 text-gray-50 text-[8px]">
-        {discussion.user?.login[0].toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
-  );
 
   const emojis = new Map<string, string>([
     [":rocket:", "🚀"],
@@ -47,7 +38,7 @@ export default function DiscussionPreview({ repoName, discussion }: DiscussionPr
           </Link>
           {discussion.category.is_answerable ? (
             <p className="flex gap-1 flex-nowrap text-xs text-gray-400">
-              <UserAvatar />
+              <UserAvatar user={discussion.user} className="w-3 h-3 translate-y-0.5" />
               {discussion.user?.login} asked {timeAgo.format(new Date(discussion.created_at))} in{" "}
               {discussion.category.name} •{" "}
               <span className={discussion.answer_chosen_at != null ? "text-green-500" : ""}>
@@ -56,7 +47,7 @@ export default function DiscussionPreview({ repoName, discussion }: DiscussionPr
             </p>
           ) : (
             <p className="flex gap-1 flex-nowrap text-xs text-gray-400">
-              <UserAvatar />
+              <UserAvatar user={discussion.user} className="w-3 h-3 translate-y-0.5" />
               {discussion.user?.login} started {timeAgo.format(new Date(discussion.created_at))} in{" "}
               {discussion.category.name}
             </p>

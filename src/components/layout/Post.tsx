@@ -1,10 +1,10 @@
 import { GitHubAuthorAssociation, GitHubReactions, GitHubUser } from "@/lib/types";
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import TimeAgo from "javascript-time-ago";
 import { marked } from "marked";
 import parse from "html-react-parser";
+import { UserAvatar } from "./UserAvatar";
 
 type CommentProps = {
   body: string | null | undefined;
@@ -39,10 +39,7 @@ export default async function Post({
     <div className="flex flex-col border rounded-lg overflow-clip">
       <div className="flex justify-between bg-white bg-opacity-[5%] py-2.5 px-4 border-b">
         <div className="flex flex-nowrap gap-2">
-          <Avatar>
-            <AvatarImage src={user?.avatar_url} />
-            <AvatarFallback>{user?.login[0]}</AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} />
           <p className="text-sm font-medium">
             {user?.login} <span className="text-gray-400 font-normal">{timeAgo.format(creationTime)}</span>
           </p>

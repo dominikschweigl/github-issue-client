@@ -1,11 +1,10 @@
 import TimeAgo from "javascript-time-ago";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { GitHubIssue } from "@/lib/types";
-import { AvatarImage } from "@radix-ui/react-avatar";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { CircleCheck, CircleDot, CircleSlash } from "lucide-react";
 import React, { ReactNode } from "react";
 import Link from "next/link";
+import { UserAvatar } from "./UserAvatar";
 
 type IssuePreviewProps = {
   repoName: string;
@@ -34,24 +33,14 @@ export default function IssuePreview({ repoName, issue }: IssuePreviewProps) {
                 <p>
                   #{issue.number} opened {timeAgo.format(opened)} by
                 </p>
-                <Avatar className="w-3 h-3">
-                  <AvatarImage src={issue.user?.avatar_url} />
-                  <AvatarFallback className="bg-gray-400 text-gray-50 text-[8px]">
-                    {issue.user?.login[0].toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar user={issue.user} className="w-3 h-3" />
                 <p>{issue.user?.login}</p>
               </>
             )}
             {issue.state === "closed" && (
               <>
                 <p>#{issue.number} by</p>
-                <Avatar className="w-3 h-3">
-                  <AvatarImage src={issue.user?.avatar_url} />
-                  <AvatarFallback className="bg-gray-400 text-gray-50">
-                    {issue.user?.login[0].toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar user={issue.user} className="w-3 h-3" />
                 <p>
                   {issue.user?.login} was closed {timeAgo.format(closed)}
                 </p>

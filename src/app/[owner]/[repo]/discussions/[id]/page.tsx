@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import Post from "@/components/layout/Post";
 import { notFound } from "next/navigation";
 import TimeAgo from "javascript-time-ago";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/layout/UserAvatar";
 
 type PageParams = {
   params: {
@@ -19,15 +19,6 @@ type PageParams = {
 export default async function Page({ params }: PageParams) {
   const [discussion, comments] = await getIssue(params.owner, params.repo, params.id);
   const timeAgo = new TimeAgo("en-US");
-
-  const UserAvatar = () => (
-    <Avatar className="w-4 h-4 translate-y-1">
-      <AvatarImage src={discussion.user?.avatar_url} />
-      <AvatarFallback className="bg-gray-400 text-gray-50 text-[8px]">
-        {discussion.user?.login[0].toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
-  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -44,13 +35,13 @@ export default async function Page({ params }: PageParams) {
         )}
         {discussion.category.is_answerable ? (
           <p className="flex gap-1 flex-nowrap text-gray-400">
-            <UserAvatar />
+            <UserAvatar user={discussion.user} className="w-4 h-4 translate-y-1" />
             {discussion.user?.login} asked this question {timeAgo.format(new Date(discussion.created_at))} in{" "}
             {discussion.category.name}
           </p>
         ) : (
           <p className="flex gap-1 flex-nowrap text-gray-400">
-            <UserAvatar />
+            <UserAvatar user={discussion.user} className="w-4 h-4 translate-y-1" />
             {discussion.user?.login} started this conversation{" "}
             {timeAgo.format(new Date(discussion.created_at))} in {discussion.category.name}
           </p>

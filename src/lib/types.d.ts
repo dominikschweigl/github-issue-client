@@ -52,3 +52,5 @@ type GitHubDiscussionCategory = {
   slug: string;
   is_answerable: boolean;
 };
+
+type GitHubRepoSearch = Endpoints["GET /search/repositories"]["response"]["data"];

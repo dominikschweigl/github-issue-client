@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { GitHubLogoIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import RepositoryBreadCrumb from "./RepositoryBreadCrumb";
 import { GitHubRepository } from "@/lib/types";
+import RepositorySearchModal from "./RepositorySearchModal";
 
 type NavigationProps = {
   repository?: GitHubRepository;
@@ -23,10 +24,12 @@ export default function Navigation({ repository, subnavigation }: NavigationProp
           {repository && <RepositoryBreadCrumb repository={repository} />}
         </nav>
         <div className="flex items-center gap-4 ml-auto md:gap-2 lg:gap-4">
-          <Button variant={"secondary"}>
-            <MagnifyingGlassIcon className="h-4 w-4" />
-            Search
-          </Button>
+          <RepositorySearchModal isDialog>
+            <Button variant={"secondary"}>
+              <MagnifyingGlassIcon className="h-4 w-4" />
+              Search
+            </Button>
+          </RepositorySearchModal>
         </div>
       </div>
       {subnavigation}
