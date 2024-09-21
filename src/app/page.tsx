@@ -28,13 +28,15 @@ export default function Home() {
           <RepositorySearchModal />
         </div>
       </div>
-      <Image
-        src={"blurry_blob.svg"}
-        alt=""
-        width={1800}
-        height={500}
-        className="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 -z-10 opacity-20"
-      />
+      <div className="absolute w-screen h-screen overflow-hidden">
+        <Image
+          src={"blurry_blob.svg"}
+          alt=""
+          width={1800}
+          height={400}
+          className="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 -z-10 opacity-20"
+        />
+      </div>
     </>
   );
 }
