@@ -28,7 +28,7 @@ export default function Home() {
           <RepositorySearchModal />
         </div>
       </div>
-      <div className="absolute w-screen h-screen overflow-hidden">
+      <div className="absolute w-screen h-screen overflow-hidden -z-10">
         <Image
           src={"blurry_blob.svg"}
           alt=""

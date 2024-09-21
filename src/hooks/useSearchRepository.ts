@@ -37,12 +37,16 @@ export default function useSearchRepository(): UseSearchRepositoryResult {
   };
 }
 
-async function searchRepository(query: string): Promise<GitHubRepoSearch> {
-  const octokit = new Octokit();
+async function searchRepository(query: string): Promise<GitHubRepoSearch | null> {
+  try {
+    const octokit = new Octokit();
 
-  const search = await octokit.request("GET /search/repositories", {
-    q: query || "sort=stars",
-  });
+    const search = await octokit.request("GET /search/repositories", {
+      q: query || "sort=stars",
+    });
 
-  return search.data;
+    return search.data;
+  } catch {
+    return null;
+  }
 }
