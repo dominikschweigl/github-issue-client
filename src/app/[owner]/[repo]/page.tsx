@@ -30,7 +30,7 @@ export default async function Page({ params }: PageParams) {
 
   return (
     <div className="flex flex-col gap-4">
-      <ListTable items={fileList} />
+      <ListTable items={fileList} emptyMessage="Empty Repository." />
       {readme && (
         <ListTable
           items={[

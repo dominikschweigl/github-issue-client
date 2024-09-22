@@ -6,10 +6,12 @@ type CodeTreeProps = {
   items: ReactNode[] | undefined;
   page?: number;
   pages?: number;
+  emptyMessage?: string;
 };
 
-export default function ListTable({ head, items, page, pages }: CodeTreeProps) {
-  if (!items || items.length === 0) return "empty repository";
+export default function ListTable({ head, items, page, pages, emptyMessage }: CodeTreeProps) {
+  if (!items || items.length === 0)
+    return <div className="flex justify-center">{emptyMessage ?? "Empty."}</div>;
 
   return (
     <>

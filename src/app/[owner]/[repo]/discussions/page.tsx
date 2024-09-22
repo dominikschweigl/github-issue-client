@@ -26,7 +26,7 @@ export default async function Page({ params, searchParams }: PageParams) {
 
   return (
     <>
-      <ListTable items={discussionItems} page={currentPage} pages={pages} />
+      <ListTable items={discussionItems} page={currentPage} pages={pages} emptyMessage="No Discussions." />
     </>
   );
 }

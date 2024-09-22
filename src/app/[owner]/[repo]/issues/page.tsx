@@ -56,7 +56,9 @@ export default async function Page({ params, searchParams }: PageParams) {
     </div>
   );
 
-  return <ListTable head={listHead} items={issueList} page={currentPage} pages={pages} />;
+  return (
+    <ListTable head={listHead} items={issueList} page={currentPage} pages={pages} emptyMessage="No Issues." />
+  );
 }
 
 async function getRepositoryIssues(
