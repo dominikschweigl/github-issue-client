@@ -40,7 +40,7 @@ How It Works
 Challenges & Solutions
 ----------------------
 
-* **API Rate Limits**: Since this is a demo project, I did not handle GitHub API rate limits. In production, I would implement authentication. For now, the app simply logs an error message if the rate limit is exceeded.
+* **API Rate Limits**: Since this is a demo project, i did not authenticate the use of the GitHub API. In production, I would implement authentication. For now, the app simply logs an error message if the rate limit is exceeded and retry fetching the data once the API cooldown is finished.
 * **Missing Endpoint/Type For Discussions In OctoKit**: While working with OctoKit, I encountered the absence of a dedicated endpoint and TypeScript type for discussions. To overcome this, I fetched the necessary data directly from the GitHub REST API and manually converted the JSON response into a TypeScript type. This ensured the correct type-checking throughout the application, while maintaining consistency with other types provided by OctoKit.
 * **Implementing The Repository Search**: One challenge with the repository search modal was minimizing excessive API calls while the user typed. To address this, I implemented a debounced input query that delays API calls until the user has stopped typing. Additionally, I needed to ensure data consistency by aborting previous API calls before sending new ones, preventing overlapping api calls. To manage this cleanly as well as separate data fetching from UI components, I created a custom hook. This hook encapsulates the debouncing and API call management logic, improving code readability and reusability.
 
