@@ -2,6 +2,8 @@ import { GitHubRepoSearch } from "@/lib/types";
 import { Octokit } from "octokit";
 import { useEffect, useState } from "react";
 import useDebounce from "./useDebounce";
+import { toast } from "sonner";
+import { CircleX } from "lucide-react";
 
 type UseSearchRepositoryResult = {
   query: string;
@@ -21,12 +23,27 @@ export default function useSearchRepository(): UseSearchRepositoryResult {
     setQuery(s);
   };
 
+  const displayToast = (e: string) =>
+    toast(e, {
+      description: "The search will be retried in a short moment.",
+      icon: <CircleX color="red" />,
+      className: "gap-4",
+    });
+
   useEffect(() => {
     setLoading(true);
-    searchRepository(debouncedQuery).then((res) => {
-      setSearchResult(res);
-      setLoading(false);
+    const controller = new AbortController();
+
+    searchRepository(debouncedQuery, controller, displayToast).then((search) => {
+      if (search) {
+        setSearchResult(search);
+        setLoading(false);
+      }
     });
+
+    return () => {
+      controller.abort();
+    };
   }, [debouncedQuery]);
 
   return {
@@ -37,16 +54,25 @@ export default function useSearchRepository(): UseSearchRepositoryResult {
   };
 }
 
-async function searchRepository(query: string): Promise<GitHubRepoSearch | null> {
+async function searchRepository(
+  query: string,
+  controller: AbortController,
+  onError: (e: string) => void
+): Promise<GitHubRepoSearch | undefined> {
   try {
-    const octokit = new Octokit();
+    const octokit = new Octokit({
+      log: { error: onError, warn: onError, info: console.log, debug: console.log },
+    });
 
     const search = await octokit.request("GET /search/repositories", {
       q: query || "sort=stars",
+      request: {
+        signal: controller.signal,
+      },
     });
 
     return search.data;
   } catch {
-    return null;
+    /*catches abort error, others are caught by octokit logger */
   }
 }

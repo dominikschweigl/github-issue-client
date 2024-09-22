@@ -15,6 +15,7 @@ import Link from "next/link";
 import useSearchRepository from "@/hooks/useSearchRepository";
 import { LoadingSpinner } from "../ui/loadingspinner";
 import { DialogDescription, DialogTitle } from "../ui/dialog";
+import { Toaster } from "../ui/sonner";
 
 type RepositorySearchModalProps = {
   isDialog?: boolean;
@@ -63,6 +64,7 @@ export default function RepositorySearchModal({ isDialog, children }: Repository
           )}
         </CommandList>
       </CommandWrapper>
+      <Toaster />
     </>
   );
 }
