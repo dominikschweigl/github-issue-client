@@ -51,6 +51,8 @@ Future Improvements
 * **GitHub GraphQL API**: Use GitHub's GraphQL API instead of their REST API because:
   * Only fetch data you need and nothing more, the REST API endpoints most of the time contain a lot more data than is needed
   * Have nested fields instead of multiple REST API calls
+* **Cache Repository Search**: Add a React data fetching library (SWR, React Query) to implement caching on the repository searches (Next.js only caches server-side fetch calls)
+* **Add HTML/Markdown Sanitization**: The displayed posts and README.md files are transported as Markdown and could potentially have dangerous tags or attributes (`<link>`, `<script>`, `onclick`, ...) in them. Markdown Sanitization removes these dangerous tags and eliminates the vulnerability.
 
 Running the Project
 -------------------
