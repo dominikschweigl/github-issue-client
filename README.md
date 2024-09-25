@@ -18,10 +18,10 @@ Features
 Technologies Used
 -----------------
 
-* **Next.js**: Chosen for its dynamic routing and ease of managing search parameters, improving user experience by allowing repository URLs to be bookmarked or shared.
-* **GitHub REST API** and **OctoKit**: Used to fetch repository data, including issues, discussions, and comments.
-* **Marked**: Markdown parser that converts markdown into html for README.md preview
-* **Shadcn**: Used as a UI component library for building the foundation of the user interface, with custom components built on top to suit the application's needs.
+* [**Next.js**](https://nextjs.org/docs): Chosen for its [dynamic routing](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes) and ease of managing search parameters, improving user experience by allowing repository URLs to be bookmarked or shared.
+* [**GitHub REST API**](https://docs.github.com/en/rest?apiVersion=2022-11-28) and [**OctoKit**](https://github.com/octokit): Used to fetch repository data, including issues, discussions, and comments.
+* [**Marked**](https://www.npmjs.com/package/marked): Markdown parser that converts markdown into html for README.md preview
+* [**Shadcn**](https://ui.shadcn.com/docs): Used as a UI component library for building the foundation of the user interface, with custom components built on top to suit the application's needs.
 
 Design Decisions
 ----------------
@@ -41,18 +41,19 @@ Challenges & Solutions
 ----------------------
 
 * **API Rate Limits**: Since this is a demo project, i did not authenticate the use of the GitHub API. In production, I would implement authentication. For now, the app simply logs an error message if the rate limit is exceeded and retry fetching the data once the API cooldown is finished.
-* **Missing Endpoint/Type For Discussions In OctoKit**: While working with OctoKit, I encountered the absence of a dedicated endpoint and TypeScript type for discussions. To overcome this, I fetched the necessary data directly from the GitHub REST API and manually converted the JSON response into a TypeScript type. This ensured the correct type-checking throughout the application, while maintaining consistency with other types provided by OctoKit.
+* **Missing Endpoint/Type For Discussions In OctoKit**: While working with [OctoKit](https://github.com/octokit), I encountered the absence of a dedicated endpoint and TypeScript type for discussions. To overcome this, I fetched the necessary data directly from the GitHub REST API and manually converted the JSON response into a TypeScript type. This ensured the correct type-checking throughout the application, while maintaining consistency with other types provided by OctoKit.
 * **Implementing The Repository Search**: One challenge with the repository search modal was minimizing excessive API calls while the user typed. To address this, I implemented a debounced input query that delays API calls until the user has stopped typing. Additionally, I needed to ensure data consistency by aborting previous API calls before sending new ones, preventing overlapping api calls. To manage this cleanly as well as separate data fetching from UI components, I created a custom hook. This hook encapsulates the debouncing and API call management logic, improving code readability and reusability.
 
 Future Improvements
 -------------------
 
-* **API Authentication**: Add OAuth or token-based authentication to handle GitHub API rate limits more effectively.
-* **GitHub GraphQL API**: Use GitHub's GraphQL API instead of their REST API because:
+* **API Authentication**: Add [token-based authentication](https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2022-11-28) to increase GitHub API rate limits.
+* **GitHub GraphQL API**: Use [GitHub's GraphQL API](https://docs.github.com/en/graphql) instead of their REST API because:
   * Only fetch data you need and nothing more, the REST API endpoints most of the time contain a lot more data than is needed
   * Have nested fields instead of multiple REST API calls
-* **Cache Repository Search**: Add a React data fetching library (SWR, React Query) to implement caching on the repository searches (Next.js only caches server-side fetch calls)
+* **Cache Repository Search**: Add a React data fetching library ([SWR](https://swr.vercel.app/docs/with-nextjs), [React Query](https://tanstack.com/query/latest/docs/framework/react/overview)) to implement caching on the repository searches (Next.js only caches server-side fetch calls)
 * **Add HTML/Markdown Sanitization**: The displayed posts and README.md files are transported as Markdown and could potentially have dangerous tags or attributes (`<link>`, `<script>`, `onclick`, ...) in them. Markdown Sanitization removes these dangerous tags and eliminates the vulnerability.
+* **Add Tests**: Use testing tools like [Vitest](https://nextjs.org/docs/app/building-your-application/testing/vitest) or [Jest](https://nextjs.org/docs/app/building-your-application/testing/jest) to set up a testing environment for component and integration testing.
 
 Running the Project
 -------------------
