@@ -9,7 +9,7 @@ type RepositoryBreadCrumbProps = {
 
 export default function RepositoryBreadCrumb({ repository }: RepositoryBreadCrumbProps) {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 items-center">
       <UserAvatar user={repository.owner} />
       <Breadcrumb>
         <BreadcrumbList className=" flex-nowrap ">

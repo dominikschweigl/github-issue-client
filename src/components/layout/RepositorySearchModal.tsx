@@ -31,7 +31,7 @@ export default function RepositorySearchModal({ isDialog, children }: Repository
   return (
     <>
       {isDialog && children !== undefined && <div onClick={() => setOpen((prev) => !prev)}>{children}</div>}
-      <CommandWrapper {...commandProps} className="rounded-lg border shadow-md w-full max-w-[540px]">
+      <CommandWrapper {...commandProps} className="rounded-lg border shadow-md w-full  max-w-[540px]">
         {isDialog && (
           <>
             <DialogTitle className="hidden">Repository Search</DialogTitle>
@@ -50,11 +50,11 @@ export default function RepositorySearchModal({ isDialog, children }: Repository
               <CommandGroup>
                 {searchResult?.items.map((repo) => (
                   <Link key={repo.id + `${isDialog}`} href={`/${repo.full_name}`}>
-                    <CommandItem className="gap-3 cursor-pointer p-2">
+                    <CommandItem className="gap-3 cursor-pointer p-2 ">
                       <UserAvatar user={repo.owner} className="h-7 w-7" />
                       <div className="flex flex-col">
                         <p className="font-medium">{repo.full_name}</p>
-                        <p className="text-gray-400 truncate max-w-[380px]">{repo.description}</p>
+                        <p className="text-gray-400 line-clamp-1">{repo.description}</p>
                       </div>
                     </CommandItem>
                   </Link>

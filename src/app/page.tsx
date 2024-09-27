@@ -7,11 +7,11 @@ export default function Home() {
   return (
     <>
       <Navigation />
-      <div className="grid lg:grid-cols-2 gap-48 justify-between items-center flex-1 sm:px-4 md:px-6 mx-auto">
+      <div className="grid lg:grid-cols-2 gap-10 sm:gap-16 lg:gap-48 justify-between items-start lg:items-center lg:flex-1 px-3 sm:px-4 md:px-6 mx-auto pt-10 lg:pt-0 pb-4">
         <div className="grid gap-4">
-          <h1 className="text-7xl font-bold">GitHub Viewer</h1>
+          <h1 className="text-5xl sm:text-7xl font-bold">GitHub Viewer</h1>
           <p>Search your repository and browse through issues and discussions.</p>
-          <div className="grid grid-cols-2 gap-4 mt-6">
+          <div className="grid sm:grid-cols-2 gap-4 sm:mt-6">
             <div className="flex items-center gap-2 border rounded-lg p-4 hover:bg-white hover:bg-opacity-10 transition-colors">
               <CircleDot className="w-5 h-5" />
               Watch Issues

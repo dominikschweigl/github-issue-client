@@ -15,7 +15,7 @@ export default function Navigation({ repository, subnavigation }: NavigationProp
   return (
     <header className="sticky top-0 min-h-16 pt-3 px-3 sm:px-4 md:px-6 border-b bg-background flex flex-col gap-2 z-10">
       <div className="flex items-center gap-4">
-        <nav className="font-medium flex items-center gap-5 text-sm">
+        <nav className="font-medium flex items-center gap-3 sm:gap-5 text-sm">
           <Link href="/" className="flex items-center gap-2">
             <GitHubLogoIcon className="h-8 w-8" />
             <span className="sr-only">GitHub Issue Viewer</span>
