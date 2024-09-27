@@ -65,7 +65,8 @@ async function searchRepository(
     });
 
     const search = await octokit.request("GET /search/repositories", {
-      q: query || "sort=stars",
+      q: query || "stars:>1",
+      sort: "stars",
       request: {
         signal: controller.signal,
       },
