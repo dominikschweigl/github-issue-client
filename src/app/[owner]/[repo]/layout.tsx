@@ -1,9 +1,7 @@
 import Navigation from "@/components/layout/Navigation";
 import PageContent from "@/components/layout/PageContent";
 import RepositorySubNavigation from "@/components/layout/RepositorySubNavigation";
-import { GitHubRepository } from "@/lib/types";
-import { notFound } from "next/navigation";
-import { Octokit } from "octokit";
+import { getRepository } from "@/lib/gitHub/getRepository";
 import React, { ReactNode } from "react";
 
 type layoutProps = {
@@ -34,18 +32,4 @@ export default async function layout({ children, params }: layoutProps) {
       <PageContent>{children}</PageContent>
     </>
   );
-}
-
-async function getRepository(owner: string, repo: string): Promise<GitHubRepository> {
-  const octokit = new Octokit({});
-
-  try {
-    const repository = await octokit.request("GET /repos/{owner}/{repo}", {
-      owner: owner,
-      repo: repo,
-    });
-    return repository.data;
-  } catch {
-    notFound();
-  }
 }

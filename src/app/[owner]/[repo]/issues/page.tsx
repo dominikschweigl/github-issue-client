@@ -1,12 +1,11 @@
 import ListTable from "@/components/layout/ListTable";
-import { GitHubIssue, GitHubRepository } from "@/lib/types";
 import { CheckIcon } from "lucide-react";
-import { Octokit } from "octokit";
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import IssuePreview from "@/components/layout/IssuePreview";
-import { notFound } from "next/navigation";
+import { getRepository } from "@/lib/gitHub/getRepository";
+import { getRepositoryIssues } from "@/lib/gitHub/getRepositoryIssues";
 
 type PageParams = {
   params: {
@@ -22,12 +21,9 @@ export default async function Page({ params, searchParams }: PageParams) {
   let currentPage = Number.parseInt(searchParams?.page || "1");
   currentPage = currentPage > 0 ? currentPage : 1;
   const issuesState = searchParams?.state || "open";
-  const [repository, issues, pages] = await getRepositoryIssues(
-    params.owner,
-    params.repo,
-    currentPage,
-    issuesState
-  );
+
+  const repository = await getRepository(params.owner, params.repo);
+  const [issues, pages] = await getRepositoryIssues(params.owner, params.repo, currentPage, issuesState);
 
   const issueList = issues.map((issue, index) => (
     <IssuePreview key={index} repoName={repository.full_name} issue={issue} />
@@ -59,37 +55,4 @@ export default async function Page({ params, searchParams }: PageParams) {
   return (
     <ListTable head={listHead} items={issueList} page={currentPage} pages={pages} emptyMessage="No Issues." />
   );
-}
-
-async function getRepositoryIssues(
-  owner: string,
-  repo: string,
-  page: number,
-  state: string
-): Promise<[GitHubRepository, GitHubIssue[], number]> {
-  try {
-    const octokit = new Octokit({});
-
-    const repository = await octokit.request("GET /repos/{owner}/{repo}", {
-      owner: owner,
-      repo: repo,
-    });
-
-    const allowedStates = ["open", "closed"];
-    const issues = await octokit.request("GET /repos/{owner}/{repo}/issues", {
-      owner: owner,
-      repo: repo,
-      page: page,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      state: allowedStates.includes(state) ? state : "open",
-    });
-
-    const parse = await import("parse-link-header");
-    const link = parse.default(issues.headers.link);
-
-    return [repository.data, issues.data, (link?.last?.page && Number.parseInt(link?.last?.page)) || page];
-  } catch {
-    notFound();
-  }
 }

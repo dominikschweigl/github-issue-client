@@ -1,10 +1,10 @@
 import ListTable from "@/components/layout/ListTable";
-import { GitHubRepoTree } from "@/lib/types";
-import { Octokit } from "octokit";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { File, Folder } from "lucide-react";
 import React from "react";
 import parse from "html-react-parser";
+import { getRepositoryReadme } from "@/lib/gitHub/getRepositoryReadme";
+import { getRepositoryTree } from "@/lib/gitHub/getRepositoryTree";
 
 type PageParams = {
   params: {
@@ -14,7 +14,8 @@ type PageParams = {
 };
 
 export default async function Page({ params }: PageParams) {
-  const [tree, readme] = await getTree(params.owner, params.repo);
+  const tree = await getRepositoryTree(params.owner, params.repo);
+  const readme = await getRepositoryReadme(params.owner, params.repo);
 
   const readmeContent = parse(readme);
 
@@ -53,31 +54,4 @@ function ItemIcon({ type }: { type: string | undefined }) {
   } else {
     return <QuestionMarkIcon className="w-4 h-4" />;
   }
-}
-
-async function getTree(owner: string, repo: string): Promise<[GitHubRepoTree, string]> {
-  const octokit = new Octokit({});
-
-  const repository = await octokit.request("GET /repos/{owner}/{repo}", {
-    owner: owner,
-    repo: repo,
-  });
-
-  //wrong type in octokit due to header accept value
-  //eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const readme: any = await octokit.request("GET /repos/{owner}/{repo}/readme", {
-    owner: owner,
-    repo: repo,
-    headers: {
-      accept: "application/vnd.github.html+json",
-    },
-  });
-
-  const tree = await octokit.request("GET /repos/{owner}/{repo}/git/trees/{tree_sha}", {
-    owner: owner,
-    repo: repo,
-    tree_sha: repository.data.default_branch,
-  });
-
-  return [tree.data, readme.data];
 }

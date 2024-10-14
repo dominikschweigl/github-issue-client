@@ -1,11 +1,9 @@
-import { GitHubComment, GitHubIssue } from "@/lib/types";
 import { CircleCheck, CircleDot } from "lucide-react";
-import { Octokit } from "octokit";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import Post from "@/components/layout/Post";
-import { notFound } from "next/navigation";
+import { getIssue } from "@/lib/gitHub/getIssue";
 
 type PageParams = {
   params: {
@@ -59,30 +57,4 @@ export default async function Page({ params }: PageParams) {
       ))}
     </div>
   );
-}
-
-async function getIssue(
-  owner: string,
-  repo: string,
-  issueNumber: number
-): Promise<[GitHubIssue, GitHubComment[]]> {
-  try {
-    const octokit = new Octokit({});
-
-    const issue = await octokit.request("GET /repos/{owner}/{repo}/issues/{issue_number}", {
-      owner: owner,
-      repo: repo,
-      issue_number: issueNumber,
-    });
-
-    const comments = await octokit.request("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", {
-      owner: owner,
-      repo: repo,
-      issue_number: issueNumber,
-    });
-
-    return [issue.data, comments.data];
-  } catch {
-    notFound();
-  }
 }

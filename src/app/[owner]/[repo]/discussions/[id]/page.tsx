@@ -1,12 +1,11 @@
-import { GitHubComment, GitHubDiscussion } from "@/lib/types";
 import { CircleCheck } from "lucide-react";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import Post from "@/components/layout/Post";
-import { notFound } from "next/navigation";
 import TimeAgo from "javascript-time-ago";
 import { UserAvatar } from "@/components/layout/UserAvatar";
+import { getDiscussion } from "@/lib/gitHub/getDiscussion";
 
 type PageParams = {
   params: {
@@ -17,7 +16,7 @@ type PageParams = {
 };
 
 export default async function Page({ params }: PageParams) {
-  const [discussion, comments] = await getIssue(params.owner, params.repo, params.id);
+  const [discussion, comments] = await getDiscussion(params.owner, params.repo, params.id);
   const timeAgo = new TimeAgo("en-US");
 
   return (
@@ -73,26 +72,4 @@ export default async function Page({ params }: PageParams) {
       ))}
     </div>
   );
-}
-
-async function getIssue(
-  owner: string,
-  repo: string,
-  issueNumber: number
-): Promise<[GitHubDiscussion, GitHubComment[]]> {
-  try {
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/discussions/${issueNumber}`);
-    if (!response.ok) notFound();
-    const discussion: GitHubDiscussion = await response.json();
-
-    const responseComments = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/discussions/${issueNumber}/comments`
-    );
-    if (!responseComments.ok) notFound();
-    const comments: GitHubComment[] = await responseComments.json();
-
-    return [discussion, comments];
-  } catch {
-    notFound();
-  }
 }
